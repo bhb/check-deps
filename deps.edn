@@ -2,7 +2,12 @@
  :deps {org.clojure/clojure {:mvn/version "1.10.0-alpha8"}
         org.clojure/tools.deps.alpha {:mvn/version "0.5.452"}}
  :aliases
- {:test {:extra-paths ["test"]
+ {:lint {:extra-deps {com.jameslaverack/cljfmt-runner
+                      {:git/url "https://github.com/JamesLaverack/cljfmt-runner"
+                       :sha "51f85c9d6cc67107620749ceacd46120647fe107"}}
+         :main-opts ["-m" "cljfmt-runner.check"]}
+  :lint/fix {:main-opts ["-m" "cljfmt-runner.fix"]}
+  :test {:extra-paths ["test"]
          :extra-deps {org.clojure/test.check {:mvn/version "0.10.0-alpha3"}}}
   :runner
   {:extra-deps {com.cognitect/test-runner

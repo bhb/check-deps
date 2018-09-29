@@ -4,14 +4,8 @@
             [clojure.spec.alpha :as s])
   (:gen-class))
 
-(defn -main
-  [& args]
-  ;; TODO - real command line parsing
-  (let [filename (first args)
-        s (slurp (or filename "deps.edn"))
-        form (edn/read-string s)]
+(defn -main []
+  (let [form (edn/read-string (slurp *in*))]
     (s/explain
      :clojure.tools.deps.alpha.specs/deps-map
-     form
-     )
-    ))
+     form)))
