@@ -4,7 +4,8 @@
         com.bhauman/spell-spec {:mvn/version "0.1.1"}
         expound {:mvn/version "0.7.1"}}
  :aliases
- {:lint {:extra-deps {com.jameslaverack/cljfmt-runner
+ {;; usage: clj -A:lint:lint/fix
+  :lint {:extra-deps {com.jameslaverack/cljfmt-runner
                       {:git/url "https://github.com/JamesLaverack/cljfmt-runner"
                        :sha "51f85c9d6cc67107620749ceacd46120647fe107"}}
          :main-opts ["-m" "cljfmt-runner.check"]}
