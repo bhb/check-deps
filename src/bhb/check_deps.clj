@@ -40,4 +40,4 @@
              ::specs/deps-map
              form)
             (string/replace #"\-+ Spec failed \-+.*\n" "")
-            (println))))))
+            (print))))))
