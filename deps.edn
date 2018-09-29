@@ -1,6 +1,8 @@
 {:paths ["resources" "src"]
  :deps {org.clojure/clojure {:mvn/version "1.10.0-alpha8"}
-        org.clojure/tools.deps.alpha {:mvn/version "0.5.452"}}
+        org.clojure/tools.deps.alpha {:mvn/version "0.5.452"}
+        com.bhauman/spell-spec {:mvn/version "0.1.1"}
+        expound {:mvn/version "0.7.1"}}
  :aliases
  {:lint {:extra-deps {com.jameslaverack/cljfmt-runner
                       {:git/url "https://github.com/JamesLaverack/cljfmt-runner"
