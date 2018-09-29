@@ -2,6 +2,8 @@
 
 Verify your `deps.edn` file
 
+<img width="630" alt="1__tmux" src="https://user-images.githubusercontent.com/33398/46250550-34361500-c3fa-11e8-84cf-5f4625d6553c.png">
+
 ## Getting started
 
 Add an alias to `~/.clojure/deps.edn`
