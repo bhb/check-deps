@@ -5,7 +5,13 @@
   (:gen-class))
 
 (defn -main []
-  (let [form (edn/read-string (slurp *in*))]
-    (s/explain
-     :clojure.tools.deps.alpha.specs/deps-map
-     form)))
+  (let [form (try
+               (edn/read-string (slurp *in*))
+               (catch java.lang.RuntimeException e
+                 ;; Print any parsing errors
+                 (println (.getMessage e))
+                 ::none))]
+    (when-not (= ::none form)
+      (s/explain
+       :clojure.tools.deps.alpha.specs/deps-map
+       form))))
