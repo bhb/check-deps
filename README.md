@@ -1,26 +1,26 @@
 # check-deps
 
-FIXME: description
+Verify your `deps.edn` file
 
-## Installation
+## Getting started
 
-Download from http://example.com/FIXME.
+Add an alias to `~/.clojure/deps.edn`
+
+```
+;; within `:aliases` map
+:check-deps {:extra-deps {bhb/check-deps
+                           {:git/url "https://github.com/bhb/check-deps"
+                            :sha "894e2418e05e341e62efb00ccca0aae740ec0c6d"}}
+             :main-opts ["-m" "bhb.check-deps"]}}
+```
 
 ## Usage
 
-FIXME: explanation
-
-Run the project directly:
-
-    $ clj -m bhb.check-deps
-
-Run the project's tests (they'll fail until you edit them):
-
-    $ clj -A:test:runner
+`cat deps.edn | clj -A:check-deps`
 
 ## Options
 
-FIXME: listing of options this app accepts.
+
 
 ## Examples
 
