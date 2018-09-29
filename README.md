@@ -20,23 +20,11 @@ Add an alias to `~/.clojure/deps.edn`
 
 ## Options
 
-
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+FIXME
 
 ## License
 
-Copyright © 2018 FIXME
+Copyright © 2018  Ben Brinckerhoff
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
