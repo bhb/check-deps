@@ -18,9 +18,7 @@ Add an alias to `~/.clojure/deps.edn`
 
 `cat deps.edn | clj -A:check-deps`
 
-## Options
-
-FIXME
+`echo "{:dep1 {}}" | clj -A:check-deps --no-color`
 
 ## License
 
