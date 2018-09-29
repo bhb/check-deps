@@ -2,6 +2,7 @@
  :deps {org.clojure/clojure {:mvn/version "1.10.0-alpha8"}
         org.clojure/tools.deps.alpha {:mvn/version "0.5.452"}
         com.bhauman/spell-spec {:mvn/version "0.1.1"}
+        org.clojure/tools.cli {:mvn/version "0.4.1"}
         expound {:mvn/version "0.7.1"}}
  :aliases
  {;; usage: clj -A:lint:lint/fix

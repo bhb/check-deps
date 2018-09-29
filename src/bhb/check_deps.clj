@@ -5,7 +5,8 @@
             [expound.alpha :as expound]
             [spell-spec.expound]
             [clojure.tools.deps.alpha.specs :as specs]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [clojure.tools.cli :as cli])
   (:gen-class))
 
 (s/def :mvn/coord (spell/keys :req [:mvn/version] :opt-un [::specs/path ::specs/exclusions]))
@@ -24,20 +25,63 @@
     20 4
     (int (* 0.2 len))))
 
-(defn -main []
-  (let [form (try
-               (edn/read-string (slurp *in*))
-               (catch java.lang.RuntimeException e
-                 ;; Print any parsing errors
-                 (println (.getMessage e))
-                 ::none))]
-    (when-not (= ::none form)
-      (binding [s/*explain-out* (expound/custom-printer
-                                 {:print-specs? false
-                                  :theme :figwheel-theme})
-                spell/*length->threshold* length->threshold]
-        (-> (s/explain-str
-             ::specs/deps-map
-             form)
-            (string/replace #"\-+ Spec failed \-+.*\n" "")
-            (print))))))
+(def cli-options
+  [["-c" "--[no-]color" "Colorize output" :default true]
+   ["-h" "--help"]])
+
+(defn usage [options-summary]
+  (->> ["Reads deps information from STDIN and prints results"
+        ""
+        "Options:"
+        options-summary]
+       (string/join \newline)))
+
+(defn error-msg [errors]
+  (string/join \newline errors))
+
+(defn exit [msg status]
+  (println msg)
+  (System/exit status))
+
+(defn -main [& args]
+  (let [{:keys [options errors summary]} (cli/parse-opts args cli-options)
+        {:keys [color]} options]
+    (cond
+      (:help options)
+      (exit (usage summary) 0)
+
+      errors
+      (exit  (error-msg errors) 1)
+
+      :else
+      (let [form (try
+                   (edn/read-string (slurp *in*))
+                   (catch java.lang.RuntimeException e
+                     ;; Print any parsing errors
+                     (println (.getMessage e))
+                     ::error))]
+
+        (cond
+          (= ::error form)
+          (exit "Unparseable EDN" 1)
+
+          (nil? form)
+          (exit "No input" 1)
+
+          :else
+          (binding [s/*explain-out* (expound/custom-printer
+                                     {:print-specs? false
+                                      :theme (if color
+                                               :figwheel-theme
+                                               :none)})
+                    spell/*length->threshold* length->threshold]
+            (let [result (-> (s/explain-str
+                              ::specs/deps-map
+                              form)
+                             (string/replace #"\-+ Spec failed \-+.*\n" ""))]
+              (if (= "Success!\n" result)
+                (do
+                  (println "Deps valid")
+                  (System/exit 0))
+                (do (println result)
+                    (System/exit 1))))))))))
