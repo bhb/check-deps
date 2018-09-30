@@ -43,6 +43,16 @@
   (println msg)
   (System/exit status))
 
+(defn edn-parse-error [err]
+  (let [{:keys [message col line s]} err
+        prefix (str line ":" col " - ")]
+    (format "%s\n\n%s%s\n%s%s"
+            (string/replace message "java.lang.RuntimeException: " "")
+            prefix
+            (get (string/split-lines s) (dec line))
+            (apply str (repeat (count prefix) " "))
+            (str (apply str (repeat (dec col) " ")) "^"))))
+
 (defn -main [& args]
   (let [{:keys [options errors summary]} (cli/parse-opts args cli-options)
         {:keys [color]} options]
@@ -54,16 +64,24 @@
       (exit  (error-msg errors) 1)
 
       :else
-      (let [form (try
-                   (edn/read-string (slurp *in*))
+      (let [in (slurp *in*)
+            ;; new PushbackReader(new java.io.StringReader(s))
+
+            reader (clojure.lang.LineNumberingPushbackReader.
+                    (java.io.StringReader. in))
+            form (try
+                   (edn/read reader)
                    (catch java.lang.RuntimeException e
                      ;; Print any parsing errors
-                     (println (.getMessage e))
-                     ::error))]
+                     [::error {:message (.getMessage e)
+                               :col (dec (.getColumnNumber reader))
+                               :line (.getLineNumber reader)
+                               :s in}]))]
 
         (cond
-          (= ::error form)
-          (exit "Unparseable EDN" 1)
+          (and (seqable? form) (= ::error (first form)))
+          (exit (edn-parse-error (second form))
+                1)
 
           (nil? form)
           (exit "No input" 1)
