@@ -12,7 +12,7 @@ Add an alias to `~/.clojure/deps.edn`
 ;; within `:aliases` map
 :check-deps {:extra-deps {bhb/check-deps
                            {:git/url "https://github.com/bhb/check-deps"
-                            :sha "e14cff5036f0ae0566aaf6f345d9b6c3f521f9f8"}}
+                            :sha "ce51e7e0814e4e6095027f34cd7a39475d95d153"}}
              :main-opts ["-m" "bhb.check-deps"]}}
 ```
 
